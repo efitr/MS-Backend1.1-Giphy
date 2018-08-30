@@ -40,34 +40,9 @@ app.get('/greetings/:name', function (req, res) {
 });
 //Route root 
 app.get('/', function (req, res) {
-  console.log(req.query.term);
-  var queryString = req.query.term;
-  //Encode the query space to remove white spaces and restricted characters
-  var term = encodeURIComponent(queryString);
-  //Put the search term on the giphy API SEARCH URL
-  var url = 'http://api.giphy.com/v1/gifs/search?q=' + term + '&api_key=dc6zaTOxFJmzC';
-
-  http.get(url, function(response) {
-    //Set encoding of response to UTF8
-    response.setEncoding('utf8');
-
-    var body = '';
-
-    response.on('data', function(d){
-      //Continously update with data from GIPHY
-      body += d;
-    });
-
-    response.on('end', function() {
-      //When data is fully received parse into JSON
-      var parsed = JSON.parse(body);
-      //Render home template and pass the gif data in to the template
-      res.render('home', {gifs: parsed.data});
-    });
-
+  giphy.search(req.query.term, function (err, response) {
+    res.render('home', {gifs: response.data})
   });
-
-  res.render('home');
 });
 
 /////////////////////////////////////////

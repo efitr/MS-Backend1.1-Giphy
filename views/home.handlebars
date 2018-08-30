@@ -4,3 +4,6 @@
   <input type="text" name="term">
   <button type="submit">Search</button>
 </form>
+{{#each gifs}}
+  <img src="{{this.images.fixed_height.url}}">
+{{/each}}
