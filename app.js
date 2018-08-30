@@ -11,6 +11,8 @@ var exphbs  = require('express-handlebars');
 
 var http = require('http');
 
+var giphy = require('giphy-api')();
+
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 
