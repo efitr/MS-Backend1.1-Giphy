@@ -15,6 +15,7 @@ var giphy = require('giphy-api')();
 
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
+app.use(express.static('public'));
 
 /////////////////////////////////////////
 //  THIS ARE ROUTES
@@ -39,12 +40,27 @@ app.get('/greetings/:name', function (req, res) {
   res.render('greetings', {name: name});
 });
 //Route root 
-app.get('/', function (req, res) {
-  giphy.search(req.query.term, function (err, response) {
-    res.render('home', {gifs: response.data})
-  });
-});
 
+app.get('/', function (req, res) {
+//   console.log('request=', req)
+//   giphy.search(req.query.term, function (err, response) {
+//     //console.log('response=', res)
+//     res.render('home', {gifs: response.data})
+//   });
+// });
+  //console.log('request=', req)
+  if (req.query.term != undefined &&  req.query.term != "") {
+    giphy.search(req.query.term, function (err, response) {
+        console.log('response=', res)
+        res.render('home', {gifs: response.data})
+      });
+  }
+    else {
+        giphy.trending(function (err, response) {
+        res.render('home', {gifs: response.data})
+        });
+    }
+});
 /////////////////////////////////////////
 //  This connects with the server
 /////////////////////////////////////////
